@@ -10,6 +10,7 @@ namespace CmsShoppingCart.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Fruit")]
         public string Title { get; set; }
         [Required]
         public string Slug { get; set; }
