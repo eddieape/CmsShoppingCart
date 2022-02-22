@@ -70,5 +70,45 @@ namespace CmsShoppingCart.Areas.Admin.Controllers
 
             return View(page);
         }
+
+
+        //GET /admin/pages/edit/id
+        public async Task<IActionResult> Edit(int id)
+        {
+            Page page = await _context.Pages.FindAsync(id);
+            if (page == null)
+            {
+                return NotFound();
+            }
+            return View(page);
+        }
+
+        //POST  /admin/pages/edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Page page)
+        {
+            if (ModelState.IsValid)
+            {
+                page.Slug = page.Id == 1 ? "home" : page.Title.ToLower().Replace(" ", "-");
+                
+                var slug = await _context.Pages.Where(u => u.Id != page.Id).FirstOrDefaultAsync(x => x.Slug == page.Slug);
+                if (slug != null)
+                {
+                    ModelState.AddModelError("", "The page already exists.");
+                    return View(page);
+                }
+
+                _context.Update(page);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "The page has been edited!";
+
+                return RedirectToAction("Edit", new { id = page.Id });
+            }
+
+            return View(page);
+        }
     }
+
 }
