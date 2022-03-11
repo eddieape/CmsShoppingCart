@@ -15,7 +15,7 @@ namespace CmsShoppingCart.Models
 
         public string Slug { get; set; }
 
-        [Required, MinLength(2, ErrorMessage = "Minimum length is 4")]
+        [Required, MinLength(4, ErrorMessage = "Minimum length is 4")]
         public string Cotent { get; set; }
 
         public int Sorting { get; set; }
