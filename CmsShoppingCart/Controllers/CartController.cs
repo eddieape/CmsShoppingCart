@@ -53,7 +53,12 @@ namespace CmsShoppingCart.Controllers
 
             HttpContext.Session.SetJson("Cart", cart);
 
-            return RedirectToAction("Index");
+            if (HttpContext.Request.Headers["X-Requested-With"] != "XMLHttpRequest")
+            {
+                return RedirectToAction("Index");
+            }
+
+            return ViewComponent("SmallCart");
         }
 
         // GET /cart/decrease/id
@@ -118,7 +123,11 @@ namespace CmsShoppingCart.Controllers
 
             HttpContext.Session.Remove("Cart");
 
-            return RedirectToAction("Index");
+            //return RedirectToAction("Page", "Pages");
+
+            //return Redirect("/");
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }
